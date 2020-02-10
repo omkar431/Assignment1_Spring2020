@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Assignment1_Spring2020_omkar
 {
@@ -43,12 +44,12 @@ namespace Assignment1_Spring2020_omkar
                 {
                     Console.Write(val);
                     val--;
-                } // printing n to 1 by decreasing the value of n by 1 each time before printing on same line
+                } // printing n to 1 by decreasing the value of val by 1 each time before printing on same line
                 Console.WriteLine("");
                 n--; // reducing value of n by 1 so in next for loop pattern will start from n-1 and so on.
                 if (n != 0)
                 {
-                    PrintPattern(n);
+                    PrintPattern(n); // recursion used
                 }
             }
             catch
@@ -69,16 +70,35 @@ namespace Assignment1_Spring2020_omkar
             {
                 sum = sum + x;
                 x++;
-                Console.Write(sum + (i < n2-1 ? "," : ""));
+                Console.Write(sum + (i < n2-1 ? "," : "")); // formating output separated by ",".
             }
             
         }
+
+        // Question 3
 
         public static string UsfTime(string s)
         {
             try
             {
-                //Write your code here .!!
+                Regex rg = new Regex(@"AM|PM");  // Use Regex to find AM or PM in string
+                string ampm = rg.Match(s).ToString(); // Stored the value of AM or PM in ampm
+                string[] arr = s.Split(":");              // Split input string by ":" eg: ['09', '15', '35PM']
+                int hr, min, sec, nhr, nmin, nsec;
+
+                hr = Int32.Parse(arr[0]);
+                if (ampm == "PM") {
+                    hr += 12;  // conversion into 24hr format
+                }
+                min = Int32.Parse(arr[1]);
+                sec = Int32.Parse(Regex.Replace(arr[2], @"AM|PM", ""));  // Remove Am/PM from seconds. eg. 35PM -> 35
+                nsec = hr * 3600 + min * 60 + sec;
+                nmin = nsec / 45;
+                nsec = nsec - nmin * 45;
+                nhr = nmin / 60;
+                nmin = nmin - nhr * 60;
+
+                return "" + nhr + ":" + nmin + ":" + nsec;
             }
             catch
             {
@@ -87,12 +107,39 @@ namespace Assignment1_Spring2020_omkar
             return null;
         }
 
+        // Question 4
 
         public static void UsfNumbers(int n3, int k)
         {
             try
             {
-                // Write your code here
+                string e;
+                for (int i = 1; i <= n3; i++) 
+                {
+                    if (i % 11 == 0)
+                    {
+                         e = "\n";
+                    }
+                    else
+                    {
+                        e = " ";
+                    } // Used if else for printing only 11 numbers per line 
+                    
+                    string str = "";
+                    if (i % 3 == 0) 
+                    str = str + "U";
+                    if (i % 5 == 0) 
+                    str = str + "S";
+                    if (i % 7 == 0) 
+                    str = str + "F";
+                    if (str == "") // Updated string as per requirement
+                        str = ""+i;
+                    Console.Write(str+e); 
+
+
+
+                }
+
             }
             catch
             {
@@ -100,13 +147,33 @@ namespace Assignment1_Spring2020_omkar
             }
         }
 
-
+        // Question 5
 
         public static void PalindromePairs(string[] words)
         {
             try
             {
-                // Write your code here
+                string str;
+                for (int i = 0; i < words.Length; i++) 
+                {
+                    for (int j = 0; j < words.Length; j++) // limiting our operations within words[].
+                    {
+
+                        str = words[i] + words[j]; // storing the pairs in str variable
+                        string rev = "";
+                        for (int k = str.Length - 1; k >= 0; k--) // checking if the pair us palindrome
+                        {
+                            rev += str[k];
+                        }
+                        // if the pairs is palindrome print the index of the pair. 
+                        if (i != j && rev == str)
+                        {
+                            Console.Write("[" + i + ", " + j + "] ");
+                        }
+
+                    }
+                }          
+
             }
             catch
             {
@@ -115,6 +182,7 @@ namespace Assignment1_Spring2020_omkar
             }
         }
 
+        // Question 6
         public static void Stones(int n4)
         {
             try
